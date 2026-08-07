@@ -1,0 +1,25 @@
+# ─────────────────────────────────────────────────────────────
+#  Batch Image Resizer v11 — Dependencies
+#  Install:  pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────
+
+# ── Core (required) ──
+Pillow>=10.0
+opencv-python>=4.8
+numpy>=1.24
+
+# ── Optional: Voice Dictation tab ──
+# (the app detects these and disables the feature if missing)
+SpeechRecognition>=3.10
+
+# ── Optional: Export features (Excel / Word / PowerPoint) ──
+openpyxl>=3.1
+python-docx>=1.1
+python-pptx>=1.0
+
+# ── Optional: Offline voice recognition (Vosk) ──
+# Large download — only needed for offline speech-to-text
+# vosk>=0.3.45
+
+# ── Packaging tool (optional, for building .exe) ──
+pyinstaller>=6.0
