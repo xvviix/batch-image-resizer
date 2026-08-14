@@ -23,13 +23,19 @@ echo.
 echo ============================================================
 echo  [1/3] Checking Python ...
 echo ============================================================
+REM Prefer `python`, fall back to the Windows `py` launcher
+set "PYCMD=python"
 python --version >nul 2>&1
-if errorlevel 1 goto no_python
-for /f "delims=" %%v in ('python --version 2^>^&1') do set "PYVER=%%v"
+if errorlevel 1 (
+  py --version >nul 2>&1
+  if errorlevel 1 goto no_python
+  set "PYCMD=py"
+)
+for /f "delims=" %%v in ('%PYCMD% --version 2^>^&1') do set "PYVER=%%v"
 echo  [OK] Python found: %PYVER%
 
 REM Check Python version is suitable - 3.8 to 3.12
-python -c "import sys; sys.exit(0 if (3,8) <= sys.version_info[:2] <= (3,12) else 1)" >nul 2>&1
+%PYCMD% -c "import sys; sys.exit(0 if (3,8) <= sys.version_info[:2] <= (3,12) else 1)" >nul 2>&1
 if errorlevel 1 goto py_version_warn
 goto install_deps
 
@@ -61,7 +67,7 @@ echo ============================================================
 echo  This step only takes long on the first run.
 echo  Already installed packages are skipped.
 echo.
-python -m pip install -r requirements.txt
+%PYCMD% -m pip install -r requirements.txt
 if errorlevel 1 goto install_fail
 echo.
 echo  [OK] All libraries are ready.
@@ -91,12 +97,12 @@ if "%CHOICE%"=="2" goto run_fa
 echo  Invalid choice, defaulting to English.
 
 :run_en
-python batch_image_resizer_v11_en.py
+%PYCMD% batch_image_resizer_v11_en.py
 if errorlevel 1 goto run_fail
 goto end
 
 :run_fa
-python batch_image_resizer_v11_fa.py
+%PYCMD% batch_image_resizer_v11_fa.py
 if errorlevel 1 goto run_fail
 goto end
 
